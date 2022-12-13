@@ -7,6 +7,24 @@ testing_step = int(math.sqrt(25))
 A = [0, 2]
 B = [3, 0]
 
+def read_from_csv(filename):
+    with open(filename , 'r') as file:
+        text = ([i for i in file])
+        step = int(text[0].split(' ')[1].replace('\n' , ''))
+        x = text[1].split(' ')
+        newx = x[1].replace('\n' , '')
+        x[1] = newx
+        y = text[2].split(' ')
+        newy = y[1].replace('\n' , '')
+        y[1] = newy
+        graph = text[3:]
+        for i in range(len(graph)):
+            graph[i] = graph[i].replace('\n' , '')
+            graph[i] = graph[i].split(' ')
+            graph[i] = list(map(float , graph[i]))
+        x = list(map(int , x))
+        y = list(map(int , y))
+        return graph , step , x , y 
 
 def heuristic(grid, goal, vertex):
     '''
