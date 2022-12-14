@@ -2,6 +2,7 @@
 Contains an implementation of the A* algorithm and a few helper functions
 '''
 import math
+import timeit
 
 
 def read_from_csv(filename):
@@ -34,7 +35,7 @@ def heuristic(grid, goal, vertex):
 
 def get_neighbors(grid, vertex):
     '''
-    A function that gets all neighbors of a vertex
+    A function that gets all neighbors of a vertex as [(x,y), height]
     '''
     length = len(grid)
     neighbors = []
@@ -97,6 +98,7 @@ def a_star_algorithm(grid, step, start, goal):
                 chosen_candidate = parents[chosen_candidate]
             reconst_path.append(start)
             reconst_path.reverse()
+            print(distance_to_start)
             return reconst_path
 
         # a list of [point, height]
@@ -135,6 +137,70 @@ def a_star_algorithm(grid, step, start, goal):
     return None
 
 
+def dijkstra_algorithm(grid, step, start, goal):
+    '''
+    Uses Dijkstra's algorithm
+    '''
+    # open_list is a list of vertices which have been visited, but who's neighbors
+    # haven't all been inspected, starts with the start vertex
+    # closed_list is a list of vertices which have been selected
+
+    start = tuple(start)
+    goal = tuple(goal)
+    open_list = set([start])
+    closed_list = set([])
+    distance_to_start = {}
+    distance_to_start[start] = 0
+    # parents is an (incomplete) vector of vertices
+    parents = {}
+    parents[start] = start
+    current_vertex = start
+    while len(open_list) > 0:
+        neighbors = get_neighbors(grid, current_vertex)
+        minimum_distance = 1000000000000000000000000000000000000000000000000000000000000000000000
+        for neighbor, height in neighbors:
+            if neighbor not in closed_list:
+                open_list.add(neighbor)
+                distance = distance_to_start[current_vertex] + \
+                    math.sqrt(
+                        step**2 + (height
+                                   - grid[current_vertex[0]][current_vertex[1]])**2)
+                if neighbor not in distance_to_start or distance < distance_to_start[neighbor]:
+                    distance_to_start[neighbor] = distance
+                    parents[neighbor] = current_vertex
+                if distance < minimum_distance:
+                    minimum_distance = distance
+                    minimum_neighbor = neighbor
+        if minimum_neighbor and minimum_neighbor!=current_vertex:
+            closed_list.add(minimum_neighbor)
+            open_list.remove(minimum_neighbor)
+            current_vertex = minimum_neighbor
+        elif len(open_list) > 0:
+            current_vertex = open_list.pop()
+    print(distance_to_start)
+    if goal in distance_to_start:
+        reconst_path = []
+        while parents[goal] != goal:
+            reconst_path.append(goal)
+            goal = parents[goal]
+        reconst_path.append(start)
+        reconst_path.reverse()
+        return reconst_path
+    print('Path does not exist!')
+    return None
+
+
 if __name__ == '__main__':
     grid1, step1, x1, y1 = read_from_csv('testing.csv')
+    print(dijkstra_algorithm(grid1, step1, x1, y1))
+    print()
     print(a_star_algorithm(grid1, step1, x1, y1))
+    '''
+    print(timeit.timeit('dijkstra_algorithm([[1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, 5.0], \
+        [1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, 5.0]], 5, \
+            [0, 4], [4, 0])',
+                        "from __main__ import dijkstra_algorithm", number=1000))
+    print(timeit.timeit('a_star_algorithm([[1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, 5.0], \
+        [1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, 5.0]], 5, \
+            [0, 4], [4, 0])',
+                        "from __main__ import a_star_algorithm", number=1000))'''
