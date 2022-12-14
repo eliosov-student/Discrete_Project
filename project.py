@@ -2,7 +2,6 @@
 Contains an implementation of the A* algorithm and a few helper functions
 '''
 import math
-import sys
 import timeit
 
 
