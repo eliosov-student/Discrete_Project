@@ -2,29 +2,27 @@
 Contains an implementation of the A* algorithm and a few helper functions
 '''
 import math
-testing_graph = [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]]
-testing_step = int(math.sqrt(25))
-A = [0, 2]
-B = [3, 0]
+
 
 def read_from_csv(filename):
-    with open(filename , 'r') as file:
-        text = ([i for i in file])
-        step = int(text[0].split(' ')[1].replace('\n' , ''))
-        x = text[1].split(' ')
-        newx = x[1].replace('\n' , '')
-        x[1] = newx
-        y = text[2].split(' ')
-        newy = y[1].replace('\n' , '')
-        y[1] = newy
+    '''
+    Reads grid, step, start, goal from a csv file
+    '''
+    with open(filename, 'r', encoding='utf-8') as file:
+        text = list(file)
+        step = int(text[0].split(' ')[1].replace('\n', ''))
+        start = text[1].split(' ')
+        start[1] = start[1].replace('\n', '')
+        goal = text[2].split(' ')
+        goal[1] = goal[1].replace('\n', '')
         graph = text[3:]
-        for i in range(len(graph)):
-            graph[i] = graph[i].replace('\n' , '')
-            graph[i] = graph[i].split(' ')
-            graph[i] = list(map(float , graph[i]))
-        x = list(map(int , x))
-        y = list(map(int , y))
-        return graph , step , x , y 
+        for i, row in enumerate(graph):
+            row = row.replace('\n', '').split(' ')
+            graph[i] = list(map(float, row))
+        start = list(map(int, start))
+        goal = list(map(int, goal))
+        return graph, step, start, goal
+
 
 def heuristic(grid, goal, vertex):
     '''
@@ -38,6 +36,7 @@ def get_neighbors(grid, vertex):
     '''
     A function that gets all neighbors of a vertex
     '''
+    l = len(grid)
     neighbors = []
     if vertex[0] > 0:
         neighbors.append(
@@ -47,11 +46,11 @@ def get_neighbors(grid, vertex):
         neighbors.append(
             [(vertex[0], vertex[1]-1),
                 grid[vertex[0]][vertex[1]-1]])
-    if vertex[0] < len(grid)-1:
+    if vertex[0] < l-1:
         neighbors.append(
             [(vertex[0]+1, vertex[1]),
                 grid[vertex[0]+1][vertex[1]]])
-    if vertex[1] < len(grid[0])-1:
+    if vertex[1] < l-1:
         neighbors.append(
             [(vertex[0], vertex[1]+1),
                 grid[vertex[0]][vertex[1]+1]])
@@ -137,4 +136,5 @@ def a_star_algorithm(grid, step, start, goal):
 
 
 if __name__ == '__main__':
-    print(a_star_algorithm(testing_graph, testing_step, A, B))
+    grid1, step1, x1, y1 = read_from_csv('testing.csv')
+    print(a_star_algorithm(grid1, step1, x1, y1))
