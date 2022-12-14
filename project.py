@@ -36,7 +36,7 @@ def get_neighbors(grid, vertex):
     '''
     A function that gets all neighbors of a vertex
     '''
-    l = len(grid)
+    length = len(grid)
     neighbors = []
     if vertex[0] > 0:
         neighbors.append(
@@ -46,11 +46,11 @@ def get_neighbors(grid, vertex):
         neighbors.append(
             [(vertex[0], vertex[1]-1),
                 grid[vertex[0]][vertex[1]-1]])
-    if vertex[0] < l-1:
+    if vertex[0] < length-1:
         neighbors.append(
             [(vertex[0]+1, vertex[1]),
                 grid[vertex[0]+1][vertex[1]]])
-    if vertex[1] < l-1:
+    if vertex[1] < length-1:
         neighbors.append(
             [(vertex[0], vertex[1]+1),
                 grid[vertex[0]][vertex[1]+1]])
