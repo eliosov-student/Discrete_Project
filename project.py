@@ -67,14 +67,14 @@ def dijkstra_algorithm_optimized(grid, step, start, goal):
     while queue:
         # gets the vertex with the smallest distance to start and removes it from queue
         (current_distance, current_vertex) = heapq.heappop(queue)
-        # shortcut
-        if current_vertex == goal:
-            break
         # removes (distance to start, vertex) where the distance is not the shortest known
         # this is done because heappop(queue) is considerably more efficient than
         # calling queue.remove((old_distance, current_vertex)) and heapify(queue)
         if current_distance != distance_to_start[current_vertex]:
             continue
+        # shortcut
+        if current_vertex == goal:
+            break
 
         # find the shortest distances to start for the vertices adjacent to current_vertex
         neighbors = get_neighbors(grid, current_vertex)
