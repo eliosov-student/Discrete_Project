@@ -3,6 +3,7 @@ Contains an implementation of the A* algorithm and a few helper functions
 '''
 import math
 import timeit
+import random
 
 
 def read_from_csv(filename):
@@ -29,8 +30,8 @@ def heuristic(grid, goal, vertex):
     '''
     A heuristic function using absolute distance difference
     '''
-    return abs(vertex[0] - goal[0]) + abs(vertex[1] - goal[1]) \
-        + abs(grid[vertex[0]][vertex[1]] - grid[goal[0]][goal[1]])
+    return math.sqrt((vertex[0] - goal[0])**2 + (vertex[1] - goal[1])**2
+                     + (grid[vertex[0]][vertex[1]] - grid[goal[0]][goal[1]])**2)
 
 
 def get_neighbors(grid, vertex):
@@ -196,11 +197,13 @@ def dijkstra_algorithm_optimized(grid, step, start, goal):
 
 if __name__ == '__main__':
     grid1, step1, x1, y1 = read_from_csv('testing.csv')
-    print(timeit.timeit('dijkstra_algorithm_optimized([[1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, \
-        3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, \
-            5.0]], 5, [0, 4], [4, 0])',
-                        "from __main__ import dijkstra_algorithm_optimized", number=10000))
-    print(timeit.timeit('a_star_algorithm([[1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, 5.0], \
-        [1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 2.0, 3.0, 4.0, 5.0]], 5, \
-            [0, 4], [4, 0])',
-                        "from __main__ import a_star_algorithm", number=10000))
+    test_grid = []
+    for _ in range(100):
+        test_grid.append([])
+        for _ in range(100):
+            test_grid[-1].append(random.random()*100)
+    print(timeit.timeit('dijkstra_algorithm_optimized(test_grid, 5, [0, 0], [99, 99])',
+                        "from __main__ import dijkstra_algorithm_optimized, test_grid",
+                        number=1))
+    print(timeit.timeit('a_star_algorithm(test_grid, 5, [0, 0], [99, 99])',
+                        "from __main__ import a_star_algorithm, test_grid", number=1))
