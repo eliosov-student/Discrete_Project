@@ -101,5 +101,5 @@ def dijkstra_algorithm_optimized(grid, step, start, goal):
 
 
 if __name__ == '__main__':
-    grid1, step1, x1, y1 = read_from_csv('example3.csv')
+    grid1, step1, x1, y1 = read_from_csv('testing.csv')
     print(dijkstra_algorithm_optimized(grid1, step1, x1, y1))
