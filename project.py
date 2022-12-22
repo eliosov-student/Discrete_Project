@@ -56,8 +56,10 @@ def dijkstra_algorithm_optimized(grid, step, start, goal):
     '''
     start = tuple(start)
     goal = tuple(goal)
+
     queue = [(0, start)]
     distance_to_start = {start: 0}
+
     parents = {}
     parents[start] = start
 
@@ -69,7 +71,6 @@ def dijkstra_algorithm_optimized(grid, step, start, goal):
 
         if current_vertex == goal:
             break
-
 
         neighbors = get_neighbors(grid, current_vertex)
         for neighbor, height in neighbors:
