@@ -56,27 +56,21 @@ def dijkstra_algorithm_optimized(grid, step, start, goal):
     '''
     start = tuple(start)
     goal = tuple(goal)
-    # queue is a priority queue of ALL known (distance to start, vertex) ordered by the distance
-    # only contains vertices with non-final distances to start
     queue = [(0, start)]
-    # distance_to_start is a dictionary of the currently known shortest distances to start
     distance_to_start = {start: 0}
-    # parents is an (incomplete) vector of vertices
     parents = {}
     parents[start] = start
+
     while queue:
-        # gets the vertex with the smallest distance to start and removes it from queue
         (current_distance, current_vertex) = heapq.heappop(queue)
-        # removes (distance to start, vertex) where the distance is not the shortest known
-        # this is done because heappop(queue) is considerably more efficient than
-        # calling queue.remove((old_distance, current_vertex)) and heapify(queue)
+
         if current_distance != distance_to_start[current_vertex]:
             continue
-        # shortcut
+
         if current_vertex == goal:
             break
 
-        # find the shortest distances to start for the vertices adjacent to current_vertex
+
         neighbors = get_neighbors(grid, current_vertex)
         for neighbor, height in neighbors:
             distance = current_distance + \
@@ -85,12 +79,11 @@ def dijkstra_algorithm_optimized(grid, step, start, goal):
                                - grid[current_vertex[0]][current_vertex[1]])**2)
             if neighbor not in distance_to_start or \
                     distance < distance_to_start[neighbor]:
-                # adds the newly found shortest distance to start to queue and distance_to_start
+
                 heapq.heappush(queue, (distance, neighbor))
                 distance_to_start[neighbor] = distance
                 parents[neighbor] = current_vertex
 
-    # reconstructs the path from goal to start
     reconst_path = []
     while parents[goal] != goal:
         reconst_path.append(goal)
