@@ -59,11 +59,12 @@ def dijkstra_algorithm_optimized(grid, step, start, goal):
     # queue is a priority queue of ALL known (distance to start, vertex) ordered by the distance
     # only contains vertices with non-final distances to start
     queue = [(0, start)]
-    # distance_to_start is a dictionary of the currently known shortest distances to start
     distance_to_start = {start: 0}
+    # distance_to_start is a dictionary of the currently known shortest distances to start
     # parents is an (incomplete) vector of vertices
     parents = {}
     parents[start] = start
+
     while queue:
         # gets the vertex with the smallest distance to start and removes it from queue
         (current_distance, current_vertex) = heapq.heappop(queue)
@@ -85,6 +86,7 @@ def dijkstra_algorithm_optimized(grid, step, start, goal):
                                - grid[current_vertex[0]][current_vertex[1]])**2)
             if neighbor not in distance_to_start or \
                     distance < distance_to_start[neighbor]:
+
                 # adds the newly found shortest distance to start to queue and distance_to_start
                 heapq.heappush(queue, (distance, neighbor))
                 distance_to_start[neighbor] = distance
