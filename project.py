@@ -103,5 +103,16 @@ def dijkstra_algorithm_optimized(grid, step, start, goal):
 
 
 if __name__ == '__main__':
-    grid1, step1, x1, y1 = read_from_csv('testing.csv')
-    print(dijkstra_algorithm_optimized(grid1, step1, x1, y1))
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description='Prints the shortest path to console')
+
+    parser.add_argument("path", type=str,
+                        help="The csv containing the graph")
+    args = parser.parse_args()
+    try:
+        grid1, step1, x1, y1 = read_from_csv(args.path)
+        print(dijkstra_algorithm_optimized(grid1, step1, x1, y1))
+    except FileNotFoundError:
+        print(f"No such file: '{args.path}'")
